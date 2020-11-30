@@ -96,10 +96,12 @@ void loop() {
 void send_telemetry()
 {
   //gps.read(i);
-  send_float(1.12);   //longitude
+  send_float(12.12);   //longitude
   send_float(2.101);  //latitude
-  send_int(55);
-  send_int(999);
+  send_int(55);       //satellites
+  send_int(999);      //PDOP
+  send_float(14.23);  //speed
+  send_int(317);      //heading
 }
 
 void send_float(float value)

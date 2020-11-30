@@ -75,15 +75,41 @@ union telemetry_union
 byte satellite_char1[] = {0x06,0x06,0x06,0x1F,0x1F,0x06,0x06,0x06};
 byte satellite_char2[] = {0x02,0x09,0x05,0x15,0x15,0x05,0x09,0x02};
 byte accuracy_char[] = {0x00,0x04,0x04,0x0E,0x1B,0x0E,0x04,0x04};
+byte speed_units_char1[] = {
+  0x0A,
+  0x0C,
+  0x0A,
+  0x00,
+  0x11,
+  0x1B,
+  0x15,
+  0x11
+};
+byte speed_units_char2[] = {
+  0x00,
+  0x00,
+  0x00,
+  0x10,
+  0x10,
+  0x1C,
+  0x14,
+  0x14
+};
 
 float longitude = 0;
 float latitude = 0;
 int DOP = 0;
 int satellites = 0;
+float speed = 0;
+int heading = 0;
+int ping = 0;
 float last_longitude = -1;
 float last_latitude = -1;
 int last_DOP = -1;
 int last_satellites = -1;
+float last_speed = -1;
+int last_heading = -1;
+int last_ping = -1;
 
 bool connected = false;
 bool initialized = false;
@@ -99,6 +125,8 @@ void setup()
   p_display.begin(84, 48);
   p_display.createChar(0, active_glyph);
   main_lcd.init();
+  main_lcd.createChar(0, speed_units_char1);
+  main_lcd.createChar(1, speed_units_char2);
   main_lcd.backlight();
   gps_lcd.init();
   gps_lcd.createChar(0, satellite_char1);
@@ -116,6 +144,7 @@ void loop()
   {
     read_telemetry();
     update_gps_lcd();
+    update_main_lcd();
     last_telemetry_update = millis();
   }
   if(millis() - last_radio_sent > HEARTRATE_PERIOD)
@@ -133,10 +162,11 @@ void read_telemetry()
   while(Serial1.available() > 0) {Serial1.read();}
   while(!got && millis() - start_time < MAX_TELEMETRY_PING)
   {
-    if(Serial1.available() == 12) {got = true;}
+    if(Serial1.available() == 18) {got = true;}
   }
-  byte buffer[12];
-  for(int i = 0; i < 12; i++) {buffer[i] = Serial1.read();}
+  ping = millis()-start_time;
+  byte buffer[18];
+  for(int i = 0; i < 18; i++) {buffer[i] = Serial1.read();}
   if(got)
   {
     connected = true;
@@ -150,6 +180,10 @@ void read_telemetry()
     satellites = un.union_int;
     un.union_bytes[0] = buffer[10]; un.union_bytes[1] = buffer[11];
     DOP = un.union_int;
+    un.union_bytes[0] = buffer[12]; un.union_bytes[1] = buffer[13]; un.union_bytes[2] = buffer[14]; un.union_bytes[3] = buffer[15];
+    speed = un.union_float;
+    un.union_bytes[0] = buffer[16]; un.union_bytes[1] = buffer[17];
+    heading = un.union_int;
   }
   else
   {
@@ -157,35 +191,74 @@ void read_telemetry()
   }
 }
 
+void update_main_lcd()
+{
+  if(speed != last_speed || heading != last_heading || ping != last_ping)
+  {
+    main_lcd.setCursor(0, 0);
+    main_lcd.print("00");
+    if(abs(speed) >= 10) main_lcd.setCursor(0, 0);
+    else                 main_lcd.setCursor(1, 0);
+    main_lcd.print(speed, 1);
+    main_lcd.write(0);
+    main_lcd.write(1);
+
+    main_lcd.setCursor(7, 0);
+    main_lcd.print(ping);
+
+    main_lcd.setCursor(11, 0);
+    if(heading > 0)      main_lcd.print("R");
+    else if(heading < 0) main_lcd.print("L");
+    else                 main_lcd.print(" ");
+    main_lcd.print("00");
+    if(abs(heading) >= 100)     main_lcd.setCursor(12, 0);
+    else if(abs(heading) >= 10) main_lcd.setCursor(13, 0);
+    main_lcd.print(abs(heading));
+    main_lcd.write(223);
+
+    last_speed = speed;
+    last_heading = heading;
+  }
+}
+
 void update_gps_lcd()
 {
   if(longitude != last_longitude || latitude != last_latitude || satellites != last_satellites || DOP != last_DOP)
   {
-    gps_lcd.clear();
-    
     gps_lcd.setCursor(0, 0);
-    if(longitude > 0) gps_lcd.print("N");
-    else if(longitude < 0) gps_lcd.print("S");
-    else gps_lcd.print(0);
-    gps_lcd.print("000");
-    gps_lcd.setCursor(3, 0);
-    gps_lcd.print(latitude, 5);
+    if(latitude > 0)      gps_lcd.print("N");
+    else if(latitude < 0) gps_lcd.print("S");
+    else                  gps_lcd.print(0);
+    gps_lcd.print("00");
+    if(abs(latitude) >= 100)     gps_lcd.setCursor(1, 0);
+    else if(abs(latitude) >= 10) gps_lcd.setCursor(2, 0);
+    else                         gps_lcd.setCursor(3, 0);
+    gps_lcd.print(abs(latitude), 5);
     
     gps_lcd.setCursor(0, 1);
-    if(longitude > 0) gps_lcd.print("E");
+    if(longitude > 0)      gps_lcd.print("E");
     else if(longitude < 0) gps_lcd.print("W");
-    else gps_lcd.print(0);
-    gps_lcd.print("000");
-    gps_lcd.setCursor(3, 1);
-    gps_lcd.print(longitude, 5);
+    else                   gps_lcd.print(0);
+    gps_lcd.print("00");
+    if(abs(longitude) >= 100)     gps_lcd.setCursor(1, 1);
+    else if(abs(longitude) >= 10) gps_lcd.setCursor(2, 1);
+    else                          gps_lcd.setCursor(3, 1);
+    gps_lcd.print(abs(longitude), 5);
     
     gps_lcd.setCursor(12, 0);
     gps_lcd.write(0);
     gps_lcd.write(1);
+    gps_lcd.print("0");
+    if(satellites < 10) gps_lcd.setCursor(15, 0);
+    else                gps_lcd.setCursor(14, 0);
     gps_lcd.print(satellites);
 
     gps_lcd.setCursor(12, 1);
     gps_lcd.write(2);
+    gps_lcd.print("00");
+    if(DOP >= 100)     gps_lcd.setCursor(13, 1);
+    else if(DOP >= 10) gps_lcd.setCursor(14, 1);
+    else               gps_lcd.setCursor(15, 1);
     gps_lcd.print(DOP);
     
     last_longitude = longitude;
@@ -258,6 +331,7 @@ void update_p_display()
           value_read = true;
           char progmemBuf[16];
           strcpy_P(progmemBuf, pgm_read_word(&(menu[active_menu])));
+          Serial.println(active_menu);
           p_display.setCursor(0, 0);
           p_display.print(progmemBuf);
           p_display.setCursor(0, 2);
