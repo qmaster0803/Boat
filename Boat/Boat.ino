@@ -95,13 +95,18 @@ void loop() {
 
 void send_telemetry()
 {
+  pm.update();
   //gps.read(i);
-  send_float(12.12);   //longitude
-  send_float(2.101);  //latitude
-  send_int(55);       //satellites
-  send_int(999);      //PDOP
-  send_float(14.23);  //speed
-  send_int(317);      //heading
+  send_float(12.12);      //longitude
+  send_float(2.101);      //latitude
+  send_int(55);           //satellites
+  send_int(999);          //PDOP
+  send_float(14.23);      //speed
+  send_int(100);          //heading
+  send_int(823);          //distance to home
+  send_int(-60);          //heading to home
+  send_float(pm.voltage); //battery voltage
+  send_float(pm.current); //battery current
 }
 
 void send_float(float value)

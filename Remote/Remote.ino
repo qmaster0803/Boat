@@ -103,6 +103,10 @@ int satellites = 0;
 float speed = 0;
 int heading = 0;
 int ping = 0;
+int rth_dst = 0;
+int rth_heading = 0;
+float boat_voltage = 0;
+float boat_current = 0;
 float last_longitude = -1;
 float last_latitude = -1;
 int last_DOP = -1;
@@ -110,6 +114,10 @@ int last_satellites = -1;
 float last_speed = -1;
 int last_heading = -1;
 int last_ping = -1;
+int last_rth_dst = -1;
+int last_rth_heading = -1;
+float last_boat_voltage = -1;
+float last_boat_current = -1;
 
 bool connected = false;
 bool initialized = false;
@@ -162,13 +170,13 @@ void read_telemetry()
   while(Serial1.available() > 0) {Serial1.read();}
   while(!got && millis() - start_time < MAX_TELEMETRY_PING)
   {
-    if(Serial1.available() == 18) {got = true;}
+    if(Serial1.available() == 30) {got = true;}
   }
   ping = millis()-start_time;
-  byte buffer[18];
-  for(int i = 0; i < 18; i++) {buffer[i] = Serial1.read();}
+  byte buffer[30];
   if(got)
   {
+    for(int i = 0; i < 30; i++) {buffer[i] = Serial1.read();}
     connected = true;
     initialized = true;
     union telemetry_union un;
@@ -184,6 +192,14 @@ void read_telemetry()
     speed = un.union_float;
     un.union_bytes[0] = buffer[16]; un.union_bytes[1] = buffer[17];
     heading = un.union_int;
+    un.union_bytes[0] = buffer[18]; un.union_bytes[1] = buffer[19];
+    rth_dst = un.union_int;
+    un.union_bytes[0] = buffer[20]; un.union_bytes[1] = buffer[21];
+    rth_heading = un.union_int;
+    un.union_bytes[0] = buffer[22]; un.union_bytes[1] = buffer[23]; un.union_bytes[2] = buffer[24]; un.union_bytes[3] = buffer[25];
+    boat_voltage = un.union_float;
+    un.union_bytes[0] = buffer[26]; un.union_bytes[1] = buffer[27]; un.union_bytes[2] = buffer[28]; un.union_bytes[3] = buffer[29];
+    boat_current = un.union_float;
   }
   else
   {
@@ -193,7 +209,7 @@ void read_telemetry()
 
 void update_main_lcd()
 {
-  if(speed != last_speed || heading != last_heading || ping != last_ping)
+  if(speed != last_speed || heading != last_heading || ping != last_ping || boat_voltage != last_boat_voltage || boat_current != last_boat_current)
   {
     main_lcd.setCursor(0, 0);
     main_lcd.print("00");
@@ -213,11 +229,28 @@ void update_main_lcd()
     main_lcd.print("00");
     if(abs(heading) >= 100)     main_lcd.setCursor(12, 0);
     else if(abs(heading) >= 10) main_lcd.setCursor(13, 0);
-    main_lcd.print(abs(heading));
+    main_lcd.print(heading);
     main_lcd.write(223);
+
+    main_lcd.setCursor(0, 1);
+    main_lcd.print("00");
+    if(abs(boat_voltage) >= 10) main_lcd.setCursor(0, 1);
+    else                        main_lcd.setCursor(1, 1);
+    main_lcd.print(boat_voltage, 1);
+    main_lcd.print("V");
+
+    main_lcd.setCursor(6, 1);
+    main_lcd.print("00");
+    if(abs(boat_current) >= 10) main_lcd.setCursor(6, 1);
+    else                        main_lcd.setCursor(7, 1);
+    main_lcd.print(boat_current, 1);
+    main_lcd.print("A");
 
     last_speed = speed;
     last_heading = heading;
+    last_ping = ping;
+    last_boat_voltage = boat_voltage;
+    last_boat_current = boat_current;
   }
 }
 
