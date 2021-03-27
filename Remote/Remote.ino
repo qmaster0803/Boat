@@ -9,15 +9,17 @@
 #define FORWARD_COMMAND          0x02
 #define RUDDER_POSITION_COMMAND  0x03
 #define RUDDER_ENDPOINTS_COMMAND 0x04
+#define FRONT_LIGHT_COMMAND      0x05
+#define CIRCLE_LIGHTS_COMMAND    0x06
 
-#define COMMAND_LATITUDE   0x10
-#define COMMAND_LONGITUDE  0x11
 #define TELEMETRY_SEND     0x12
 
 #define RUDDER_POSITION_ADDR   0x00
 #define RUDDER_ENDPOINTS_ADDR  0x02
+#define FRONT_LIGHT_ADDR       0x04
+#define CIRCLE_LIGHTS_ADDR     0x06
 
-#define MENU_COUNT            2
+#define MENU_COUNT            4
 #define HEARTRATE_PERIOD      300
 #define TELEMETRY_RATE        500
 #define MAX_TELEMETRY_PING    300
@@ -39,19 +41,35 @@ bool update_data_p_display = true;
 unsigned long last_radio_sent = 0;
 unsigned long last_telemetry_update = 0;
 
-const char menu1[] PROGMEM = "Rudder pos.";
-const char menu2[] PROGMEM = "Rudder endp.";
+const char menu1[] PROGMEM = "Front light";
+const char menu2[] PROGMEM = "Circle lights";
+const char menu3[] PROGMEM = "Rudder pos.";
+const char menu4[] PROGMEM = "Rudder endp.";
 
 const char* const menu[] PROGMEM = {
-  menu1, //rudder position
-  menu2  //rudder endpoints
+  menu1, //front light
+  menu2, //circle lights
+  menu3, //rudder position
+  menu4  //rudder endpoints
 };
-const byte eeprom_addr[] PROGMEM = {
+
+const byte eeprom_addr[] = {
+  FRONT_LIGHT_ADDR,
+  CIRCLE_LIGHTS_ADDR,
   RUDDER_POSITION_ADDR,
   RUDDER_ENDPOINTS_ADDR
 };
 
+const byte setting_type[] = {
+  1, //bool, front light
+  1, //bool, circle lights
+  0, //byte, rudder position
+  0  //byte, rudder enpoints
+};
+
 const byte settings_commands[] = {
+  FRONT_LIGHT_COMMAND,
+  CIRCLE_LIGHTS_COMMAND,
   RUDDER_POSITION_COMMAND,
   RUDDER_ENDPOINTS_COMMAND
 };
@@ -75,26 +93,8 @@ union telemetry_union
 byte satellite_char1[] = {0x06,0x06,0x06,0x1F,0x1F,0x06,0x06,0x06};
 byte satellite_char2[] = {0x02,0x09,0x05,0x15,0x15,0x05,0x09,0x02};
 byte accuracy_char[] = {0x00,0x04,0x04,0x0E,0x1B,0x0E,0x04,0x04};
-byte speed_units_char1[] = {
-  0x0A,
-  0x0C,
-  0x0A,
-  0x00,
-  0x11,
-  0x1B,
-  0x15,
-  0x11
-};
-byte speed_units_char2[] = {
-  0x00,
-  0x00,
-  0x00,
-  0x10,
-  0x10,
-  0x1C,
-  0x14,
-  0x14
-};
+byte speed_units_char1[] = {0x0A,0x0C,0x0A,0x00,0x11,0x1B,0x15,0x11};
+byte speed_units_char2[] = {0x00,0x00,0x00,0x10,0x10,0x1C,0x14,0x14};
 
 float longitude = 0;
 float latitude = 0;
@@ -158,6 +158,10 @@ void loop()
   if(millis() - last_radio_sent > HEARTRATE_PERIOD)
   {
     send_radio_command(0xFF, 0xFF);
+  }
+  if(initialized && connected && error_connection_showed)
+  {
+    update_all_settings();
   }
   delay(20);
 }
@@ -305,15 +309,37 @@ void handle_buttons()
 {
   if(prev_right_button < button_right.count())
   {
-    if(is_editing && value_in_edit < 127) {value_in_edit++;}
+    if(is_editing)
+    {
+      switch(setting_type[active_menu])
+      {
+        case 0:
+          if(value_in_edit < 127) {value_in_edit++;}
+          break;
+        case 1:
+          if(value_in_edit < 1) {value_in_edit++;}
+          break;
+      }
+    }
     if(!is_editing && active_menu < MENU_COUNT-1) {active_menu++;}
     prev_right_button = button_right.count();
     update_data_p_display = true;
   }
   if(prev_left_button < button_left.count())
   {
-    if(is_editing && value_in_edit > -127) {value_in_edit--;}
-    if(active_menu > 0) {active_menu--;}
+    if(is_editing)
+    {
+      switch(setting_type[active_menu])
+      {
+        case 0:
+          if(value_in_edit > -127) {value_in_edit--;}
+          break;
+        case 1:
+          if(value_in_edit > 0) {value_in_edit--;}
+          break;
+      }
+    }
+    if(!is_editing && active_menu > 0) {active_menu--;}
     prev_left_button = button_left.count();
     update_data_p_display = true;
   }
@@ -336,7 +362,15 @@ void update_p_display()
         if(value_read)
         {
           eeprom_write_word(eeprom_addr[active_menu], value_in_edit);
-          send_radio_command(settings_commands[active_menu], 127+value_in_edit);
+          switch(setting_type[active_menu])
+          {
+            case 0:
+              send_radio_command(settings_commands[active_menu], 127+value_in_edit);
+              break;
+            case 1:
+              send_radio_command(settings_commands[active_menu], value_in_edit);
+              break;
+          }
           value_read = false;
         }
         p_display.clear();
@@ -347,6 +381,7 @@ void update_p_display()
         char progmemBuf[16];
         for(int i = first_index; i < second_index; i++)
         {
+          Serial.println(i);
           strcpy_P(progmemBuf, pgm_read_word(&(menu[i])));
           p_display.setCursor(0, 1*counter);
           if(i == active_menu) {p_display.write(0);}
@@ -443,6 +478,24 @@ void update_rc_values()
   {
     send_radio_command(FORWARD_COMMAND, 127);
     prev_forward = now_forward;
+  }
+}
+
+void update_all_settings()
+{
+  for(int i = 0; i < MENU_COUNT; i++)
+  {
+    int value = eeprom_read_word(eeprom_addr[i]);
+    switch(setting_type[i])
+    {
+      case 0:
+        send_radio_command(settings_commands[i], 127+value);
+        break;
+      case 1:
+        send_radio_command(settings_commands[i], value
+        );
+        break;
+    }
   }
 }
 

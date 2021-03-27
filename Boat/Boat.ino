@@ -13,9 +13,9 @@
 #define FORWARD_COMMAND          0x02
 #define RUDDER_POSITION_COMMAND  0x03
 #define RUDDER_ENDPOINTS_COMMAND 0x04
+#define FRONT_LIGHT_COMMAND      0x05
+#define CIRCLE_LIGHTS_COMMAND    0x06
 
-#define COMMAND_LATITUDE       0x10
-#define COMMAND_LONGITUDE      0x11
 #define TELEMETRY_SEND_COMMAND 0x12
 
 ESC rudder (A0, 1000, 2000, 1500);
@@ -61,6 +61,8 @@ void setup() {
   back.arm();
   gps.begin(Serial2);
   gps.timeZone(GPS_AutoDetectZone);
+  pinMode(A13, OUTPUT);
+  pinMode(A12, OUTPUT);
 }
 
 void loop() {
@@ -168,5 +170,7 @@ void handle_incoming_command()
   }
   if(radio_buffer[0] == RUDDER_POSITION_COMMAND) {rudder_position = radio_buffer[1];}
   if(radio_buffer[0] == RUDDER_ENDPOINTS_COMMAND) {rudder_endpoints = radio_buffer[1];}
+  if(radio_buffer[0] == FRONT_LIGHT_COMMAND) {digitalWrite(A12, radio_buffer[1]);}
+  if(radio_buffer[0] == CIRCLE_LIGHTS_COMMAND) {digitalWrite(A13, radio_buffer[1]);}
   if(radio_buffer[0] == TELEMETRY_SEND_COMMAND) {telemetry_send = true;}
 }

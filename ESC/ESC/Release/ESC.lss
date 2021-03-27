@@ -1,0 +1,239 @@
+
+ESC.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000194  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001e8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001e8  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000218  2**2
+                  CONTENTS, READONLY
+  4 .debug_info   0000048c  00000000  00000000  00000254  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 0000044e  00000000  00000000  000006e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   0000010a  00000000  00000000  00000b2e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    0000017a  00000000  00000000  00000c38  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
+   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
+  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
+  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
+  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
+  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
+  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
+  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
+  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+  32:	12 d0       	rcall	.+36     	; 0x58 <main>
+  34:	ad c0       	rjmp	.+346    	; 0x190 <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <_Z11writeOutputPVhhb>:
+  38:	fc 01       	movw	r30, r24
+  3a:	80 81       	ld	r24, Z
+  3c:	21 e0       	ldi	r18, 0x01	; 1
+  3e:	30 e0       	ldi	r19, 0x00	; 0
+  40:	01 c0       	rjmp	.+2      	; 0x44 <__SREG__+0x5>
+  42:	22 0f       	add	r18, r18
+  44:	6a 95       	dec	r22
+  46:	ea f7       	brpl	.-6      	; 0x42 <__SREG__+0x3>
+  48:	44 23       	and	r20, r20
+  4a:	11 f0       	breq	.+4      	; 0x50 <__SREG__+0x11>
+  4c:	28 2b       	or	r18, r24
+  4e:	02 c0       	rjmp	.+4      	; 0x54 <__SREG__+0x15>
+  50:	20 95       	com	r18
+  52:	28 23       	and	r18, r24
+  54:	20 83       	st	Z, r18
+  56:	08 95       	ret
+
+00000058 <main>:
+  58:	8c e3       	ldi	r24, 0x3C	; 60
+  5a:	81 bb       	out	0x11, r24	; 17
+  5c:	87 e0       	ldi	r24, 0x07	; 7
+  5e:	87 bb       	out	0x17, r24	; 23
+  60:	12 ba       	out	0x12, r1	; 18
+  62:	18 ba       	out	0x18, r1	; 24
+  64:	41 e0       	ldi	r20, 0x01	; 1
+  66:	61 e0       	ldi	r22, 0x01	; 1
+  68:	88 e3       	ldi	r24, 0x38	; 56
+  6a:	90 e0       	ldi	r25, 0x00	; 0
+  6c:	e5 df       	rcall	.-54     	; 0x38 <_Z11writeOutputPVhhb>
+  6e:	c4 e1       	ldi	r28, 0x14	; 20
+  70:	d0 e0       	ldi	r29, 0x00	; 0
+  72:	12 ba       	out	0x12, r1	; 18
+  74:	18 ba       	out	0x18, r1	; 24
+  76:	8a e1       	ldi	r24, 0x1A	; 26
+  78:	8a 95       	dec	r24
+  7a:	f1 f7       	brne	.-4      	; 0x78 <main+0x20>
+  7c:	00 c0       	rjmp	.+0      	; 0x7e <main+0x26>
+  7e:	41 e0       	ldi	r20, 0x01	; 1
+  80:	65 e0       	ldi	r22, 0x05	; 5
+  82:	82 e3       	ldi	r24, 0x32	; 50
+  84:	90 e0       	ldi	r25, 0x00	; 0
+  86:	d8 df       	rcall	.-80     	; 0x38 <_Z11writeOutputPVhhb>
+  88:	41 e0       	ldi	r20, 0x01	; 1
+  8a:	61 e0       	ldi	r22, 0x01	; 1
+  8c:	88 e3       	ldi	r24, 0x38	; 56
+  8e:	90 e0       	ldi	r25, 0x00	; 0
+  90:	d3 df       	rcall	.-90     	; 0x38 <_Z11writeOutputPVhhb>
+  92:	85 e3       	ldi	r24, 0x35	; 53
+  94:	8a 95       	dec	r24
+  96:	f1 f7       	brne	.-4      	; 0x94 <main+0x3c>
+  98:	00 00       	nop
+  9a:	21 97       	sbiw	r28, 0x01	; 1
+  9c:	51 f7       	brne	.-44     	; 0x72 <main+0x1a>
+  9e:	c4 e1       	ldi	r28, 0x14	; 20
+  a0:	d0 e0       	ldi	r29, 0x00	; 0
+  a2:	12 ba       	out	0x12, r1	; 18
+  a4:	18 ba       	out	0x18, r1	; 24
+  a6:	8a e1       	ldi	r24, 0x1A	; 26
+  a8:	8a 95       	dec	r24
+  aa:	f1 f7       	brne	.-4      	; 0xa8 <main+0x50>
+  ac:	00 c0       	rjmp	.+0      	; 0xae <main+0x56>
+  ae:	41 e0       	ldi	r20, 0x01	; 1
+  b0:	63 e0       	ldi	r22, 0x03	; 3
+  b2:	82 e3       	ldi	r24, 0x32	; 50
+  b4:	90 e0       	ldi	r25, 0x00	; 0
+  b6:	c0 df       	rcall	.-128    	; 0x38 <_Z11writeOutputPVhhb>
+  b8:	41 e0       	ldi	r20, 0x01	; 1
+  ba:	61 e0       	ldi	r22, 0x01	; 1
+  bc:	88 e3       	ldi	r24, 0x38	; 56
+  be:	90 e0       	ldi	r25, 0x00	; 0
+  c0:	bb df       	rcall	.-138    	; 0x38 <_Z11writeOutputPVhhb>
+  c2:	85 e3       	ldi	r24, 0x35	; 53
+  c4:	8a 95       	dec	r24
+  c6:	f1 f7       	brne	.-4      	; 0xc4 <main+0x6c>
+  c8:	00 00       	nop
+  ca:	21 97       	sbiw	r28, 0x01	; 1
+  cc:	51 f7       	brne	.-44     	; 0xa2 <main+0x4a>
+  ce:	c4 e1       	ldi	r28, 0x14	; 20
+  d0:	d0 e0       	ldi	r29, 0x00	; 0
+  d2:	12 ba       	out	0x12, r1	; 18
+  d4:	18 ba       	out	0x18, r1	; 24
+  d6:	8a e1       	ldi	r24, 0x1A	; 26
+  d8:	8a 95       	dec	r24
+  da:	f1 f7       	brne	.-4      	; 0xd8 <main+0x80>
+  dc:	00 c0       	rjmp	.+0      	; 0xde <main+0x86>
+  de:	41 e0       	ldi	r20, 0x01	; 1
+  e0:	63 e0       	ldi	r22, 0x03	; 3
+  e2:	82 e3       	ldi	r24, 0x32	; 50
+  e4:	90 e0       	ldi	r25, 0x00	; 0
+  e6:	a8 df       	rcall	.-176    	; 0x38 <_Z11writeOutputPVhhb>
+  e8:	41 e0       	ldi	r20, 0x01	; 1
+  ea:	62 e0       	ldi	r22, 0x02	; 2
+  ec:	88 e3       	ldi	r24, 0x38	; 56
+  ee:	90 e0       	ldi	r25, 0x00	; 0
+  f0:	a3 df       	rcall	.-186    	; 0x38 <_Z11writeOutputPVhhb>
+  f2:	85 e3       	ldi	r24, 0x35	; 53
+  f4:	8a 95       	dec	r24
+  f6:	f1 f7       	brne	.-4      	; 0xf4 <main+0x9c>
+  f8:	00 00       	nop
+  fa:	21 97       	sbiw	r28, 0x01	; 1
+  fc:	51 f7       	brne	.-44     	; 0xd2 <main+0x7a>
+  fe:	c4 e1       	ldi	r28, 0x14	; 20
+ 100:	d0 e0       	ldi	r29, 0x00	; 0
+ 102:	12 ba       	out	0x12, r1	; 18
+ 104:	18 ba       	out	0x18, r1	; 24
+ 106:	8a e1       	ldi	r24, 0x1A	; 26
+ 108:	8a 95       	dec	r24
+ 10a:	f1 f7       	brne	.-4      	; 0x108 <main+0xb0>
+ 10c:	00 c0       	rjmp	.+0      	; 0x10e <main+0xb6>
+ 10e:	41 e0       	ldi	r20, 0x01	; 1
+ 110:	64 e0       	ldi	r22, 0x04	; 4
+ 112:	82 e3       	ldi	r24, 0x32	; 50
+ 114:	90 e0       	ldi	r25, 0x00	; 0
+ 116:	90 df       	rcall	.-224    	; 0x38 <_Z11writeOutputPVhhb>
+ 118:	41 e0       	ldi	r20, 0x01	; 1
+ 11a:	62 e0       	ldi	r22, 0x02	; 2
+ 11c:	88 e3       	ldi	r24, 0x38	; 56
+ 11e:	90 e0       	ldi	r25, 0x00	; 0
+ 120:	8b df       	rcall	.-234    	; 0x38 <_Z11writeOutputPVhhb>
+ 122:	85 e3       	ldi	r24, 0x35	; 53
+ 124:	8a 95       	dec	r24
+ 126:	f1 f7       	brne	.-4      	; 0x124 <main+0xcc>
+ 128:	00 00       	nop
+ 12a:	21 97       	sbiw	r28, 0x01	; 1
+ 12c:	51 f7       	brne	.-44     	; 0x102 <main+0xaa>
+ 12e:	c4 e1       	ldi	r28, 0x14	; 20
+ 130:	d0 e0       	ldi	r29, 0x00	; 0
+ 132:	12 ba       	out	0x12, r1	; 18
+ 134:	18 ba       	out	0x18, r1	; 24
+ 136:	8a e1       	ldi	r24, 0x1A	; 26
+ 138:	8a 95       	dec	r24
+ 13a:	f1 f7       	brne	.-4      	; 0x138 <main+0xe0>
+ 13c:	00 c0       	rjmp	.+0      	; 0x13e <main+0xe6>
+ 13e:	41 e0       	ldi	r20, 0x01	; 1
+ 140:	64 e0       	ldi	r22, 0x04	; 4
+ 142:	82 e3       	ldi	r24, 0x32	; 50
+ 144:	90 e0       	ldi	r25, 0x00	; 0
+ 146:	78 df       	rcall	.-272    	; 0x38 <_Z11writeOutputPVhhb>
+ 148:	41 e0       	ldi	r20, 0x01	; 1
+ 14a:	60 e0       	ldi	r22, 0x00	; 0
+ 14c:	88 e3       	ldi	r24, 0x38	; 56
+ 14e:	90 e0       	ldi	r25, 0x00	; 0
+ 150:	73 df       	rcall	.-282    	; 0x38 <_Z11writeOutputPVhhb>
+ 152:	85 e3       	ldi	r24, 0x35	; 53
+ 154:	8a 95       	dec	r24
+ 156:	f1 f7       	brne	.-4      	; 0x154 <main+0xfc>
+ 158:	00 00       	nop
+ 15a:	21 97       	sbiw	r28, 0x01	; 1
+ 15c:	51 f7       	brne	.-44     	; 0x132 <main+0xda>
+ 15e:	c4 e1       	ldi	r28, 0x14	; 20
+ 160:	d0 e0       	ldi	r29, 0x00	; 0
+ 162:	12 ba       	out	0x12, r1	; 18
+ 164:	18 ba       	out	0x18, r1	; 24
+ 166:	8a e1       	ldi	r24, 0x1A	; 26
+ 168:	8a 95       	dec	r24
+ 16a:	f1 f7       	brne	.-4      	; 0x168 <main+0x110>
+ 16c:	00 c0       	rjmp	.+0      	; 0x16e <main+0x116>
+ 16e:	41 e0       	ldi	r20, 0x01	; 1
+ 170:	65 e0       	ldi	r22, 0x05	; 5
+ 172:	82 e3       	ldi	r24, 0x32	; 50
+ 174:	90 e0       	ldi	r25, 0x00	; 0
+ 176:	60 df       	rcall	.-320    	; 0x38 <_Z11writeOutputPVhhb>
+ 178:	41 e0       	ldi	r20, 0x01	; 1
+ 17a:	60 e0       	ldi	r22, 0x00	; 0
+ 17c:	88 e3       	ldi	r24, 0x38	; 56
+ 17e:	90 e0       	ldi	r25, 0x00	; 0
+ 180:	5b df       	rcall	.-330    	; 0x38 <_Z11writeOutputPVhhb>
+ 182:	85 e3       	ldi	r24, 0x35	; 53
+ 184:	8a 95       	dec	r24
+ 186:	f1 f7       	brne	.-4      	; 0x184 <main+0x12c>
+ 188:	00 00       	nop
+ 18a:	21 97       	sbiw	r28, 0x01	; 1
+ 18c:	51 f7       	brne	.-44     	; 0x162 <main+0x10a>
+ 18e:	6f cf       	rjmp	.-290    	; 0x6e <main+0x16>
+
+00000190 <_exit>:
+ 190:	f8 94       	cli
+
+00000192 <__stop_program>:
+ 192:	ff cf       	rjmp	.-2      	; 0x192 <__stop_program>
