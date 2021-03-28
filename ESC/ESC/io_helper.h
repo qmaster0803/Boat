@@ -1,6 +1,7 @@
 #ifndef IO_HELPER
 #define IO_HELPER
 
+#include "global_definitions.h"
 #include <avr/io.h>
 
 void writeOutput(volatile uint8_t *port, uint8_t pin, bool value);

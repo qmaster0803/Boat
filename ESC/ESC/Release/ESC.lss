@@ -3,45 +3,47 @@ ESC.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000194  00000000  00000000  00000054  2**1
+  0 .text         00000280  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000001e8  2**0
+  1 .data         00000002  00800060  00000280  00000314  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  000001e8  2**0
+  2 .bss          00000005  00800062  00800062  00000316  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000316  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000218  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000348  2**2
                   CONTENTS, READONLY
-  4 .debug_info   0000048c  00000000  00000000  00000254  2**0
+  5 .debug_info   0000048c  00000000  00000000  00000384  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 0000044e  00000000  00000000  000006e0  2**0
+  6 .debug_abbrev 0000044e  00000000  00000000  00000810  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   0000010a  00000000  00000000  00000b2e  2**0
+  7 .debug_line   0000010a  00000000  00000000  00000c5e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    0000017a  00000000  00000000  00000c38  2**0
+  8 .debug_str    0000017a  00000000  00000000  00000d68  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
-   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
-   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
-   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
-   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
-   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
-   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
-   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
-  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
-  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
-  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
-  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
-  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
-  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
-  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
-  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
-  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
-  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
-  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+   2:	d7 c0       	rjmp	.+430    	; 0x1b2 <__vector_1>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	fc c0       	rjmp	.+504    	; 0x20c <__vector_9>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
 
 00000026 <__ctors_end>:
   26:	11 24       	eor	r1, r1
@@ -50,190 +52,316 @@ Disassembly of section .text:
   2c:	d4 e0       	ldi	r29, 0x04	; 4
   2e:	de bf       	out	0x3e, r29	; 62
   30:	cd bf       	out	0x3d, r28	; 61
-  32:	12 d0       	rcall	.+36     	; 0x58 <main>
-  34:	ad c0       	rjmp	.+346    	; 0x190 <_exit>
 
-00000036 <__bad_interrupt>:
-  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e0 e8       	ldi	r30, 0x80	; 128
+  3a:	f2 e0       	ldi	r31, 0x02	; 2
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	a2 36       	cpi	r26, 0x62	; 98
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
 
-00000038 <_Z11writeOutputPVhhb>:
-  38:	fc 01       	movw	r30, r24
-  3a:	80 81       	ld	r24, Z
-  3c:	21 e0       	ldi	r18, 0x01	; 1
-  3e:	30 e0       	ldi	r19, 0x00	; 0
-  40:	01 c0       	rjmp	.+2      	; 0x44 <__SREG__+0x5>
-  42:	22 0f       	add	r18, r18
-  44:	6a 95       	dec	r22
-  46:	ea f7       	brpl	.-6      	; 0x42 <__SREG__+0x3>
-  48:	44 23       	and	r20, r20
-  4a:	11 f0       	breq	.+4      	; 0x50 <__SREG__+0x11>
-  4c:	28 2b       	or	r18, r24
-  4e:	02 c0       	rjmp	.+4      	; 0x54 <__SREG__+0x15>
-  50:	20 95       	com	r18
-  52:	28 23       	and	r18, r24
-  54:	20 83       	st	Z, r18
-  56:	08 95       	ret
+00000048 <__do_clear_bss>:
+  48:	20 e0       	ldi	r18, 0x00	; 0
+  4a:	a2 e6       	ldi	r26, 0x62	; 98
+  4c:	b0 e0       	ldi	r27, 0x00	; 0
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
 
-00000058 <main>:
-  58:	8c e3       	ldi	r24, 0x3C	; 60
-  5a:	81 bb       	out	0x11, r24	; 17
-  5c:	87 e0       	ldi	r24, 0x07	; 7
-  5e:	87 bb       	out	0x17, r24	; 23
-  60:	12 ba       	out	0x12, r1	; 18
-  62:	18 ba       	out	0x18, r1	; 24
-  64:	41 e0       	ldi	r20, 0x01	; 1
-  66:	61 e0       	ldi	r22, 0x01	; 1
-  68:	88 e3       	ldi	r24, 0x38	; 56
-  6a:	90 e0       	ldi	r25, 0x00	; 0
-  6c:	e5 df       	rcall	.-54     	; 0x38 <_Z11writeOutputPVhhb>
-  6e:	c4 e1       	ldi	r28, 0x14	; 20
-  70:	d0 e0       	ldi	r29, 0x00	; 0
-  72:	12 ba       	out	0x12, r1	; 18
-  74:	18 ba       	out	0x18, r1	; 24
-  76:	8a e1       	ldi	r24, 0x1A	; 26
-  78:	8a 95       	dec	r24
-  7a:	f1 f7       	brne	.-4      	; 0x78 <main+0x20>
-  7c:	00 c0       	rjmp	.+0      	; 0x7e <main+0x26>
-  7e:	41 e0       	ldi	r20, 0x01	; 1
-  80:	65 e0       	ldi	r22, 0x05	; 5
-  82:	82 e3       	ldi	r24, 0x32	; 50
-  84:	90 e0       	ldi	r25, 0x00	; 0
-  86:	d8 df       	rcall	.-80     	; 0x38 <_Z11writeOutputPVhhb>
-  88:	41 e0       	ldi	r20, 0x01	; 1
-  8a:	61 e0       	ldi	r22, 0x01	; 1
-  8c:	88 e3       	ldi	r24, 0x38	; 56
-  8e:	90 e0       	ldi	r25, 0x00	; 0
-  90:	d3 df       	rcall	.-90     	; 0x38 <_Z11writeOutputPVhhb>
-  92:	85 e3       	ldi	r24, 0x35	; 53
-  94:	8a 95       	dec	r24
-  96:	f1 f7       	brne	.-4      	; 0x94 <main+0x3c>
-  98:	00 00       	nop
-  9a:	21 97       	sbiw	r28, 0x01	; 1
-  9c:	51 f7       	brne	.-44     	; 0x72 <main+0x1a>
-  9e:	c4 e1       	ldi	r28, 0x14	; 20
-  a0:	d0 e0       	ldi	r29, 0x00	; 0
-  a2:	12 ba       	out	0x12, r1	; 18
-  a4:	18 ba       	out	0x18, r1	; 24
-  a6:	8a e1       	ldi	r24, 0x1A	; 26
-  a8:	8a 95       	dec	r24
-  aa:	f1 f7       	brne	.-4      	; 0xa8 <main+0x50>
-  ac:	00 c0       	rjmp	.+0      	; 0xae <main+0x56>
-  ae:	41 e0       	ldi	r20, 0x01	; 1
-  b0:	63 e0       	ldi	r22, 0x03	; 3
-  b2:	82 e3       	ldi	r24, 0x32	; 50
-  b4:	90 e0       	ldi	r25, 0x00	; 0
-  b6:	c0 df       	rcall	.-128    	; 0x38 <_Z11writeOutputPVhhb>
-  b8:	41 e0       	ldi	r20, 0x01	; 1
-  ba:	61 e0       	ldi	r22, 0x01	; 1
-  bc:	88 e3       	ldi	r24, 0x38	; 56
-  be:	90 e0       	ldi	r25, 0x00	; 0
-  c0:	bb df       	rcall	.-138    	; 0x38 <_Z11writeOutputPVhhb>
-  c2:	85 e3       	ldi	r24, 0x35	; 53
-  c4:	8a 95       	dec	r24
-  c6:	f1 f7       	brne	.-4      	; 0xc4 <main+0x6c>
-  c8:	00 00       	nop
-  ca:	21 97       	sbiw	r28, 0x01	; 1
-  cc:	51 f7       	brne	.-44     	; 0xa2 <main+0x4a>
-  ce:	c4 e1       	ldi	r28, 0x14	; 20
-  d0:	d0 e0       	ldi	r29, 0x00	; 0
-  d2:	12 ba       	out	0x12, r1	; 18
-  d4:	18 ba       	out	0x18, r1	; 24
-  d6:	8a e1       	ldi	r24, 0x1A	; 26
-  d8:	8a 95       	dec	r24
-  da:	f1 f7       	brne	.-4      	; 0xd8 <main+0x80>
-  dc:	00 c0       	rjmp	.+0      	; 0xde <main+0x86>
-  de:	41 e0       	ldi	r20, 0x01	; 1
-  e0:	63 e0       	ldi	r22, 0x03	; 3
-  e2:	82 e3       	ldi	r24, 0x32	; 50
-  e4:	90 e0       	ldi	r25, 0x00	; 0
-  e6:	a8 df       	rcall	.-176    	; 0x38 <_Z11writeOutputPVhhb>
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a7 36       	cpi	r26, 0x67	; 103
+  54:	b2 07       	cpc	r27, r18
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	9b d0       	rcall	.+310    	; 0x190 <main>
+  5a:	10 c1       	rjmp	.+544    	; 0x27c <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <_Z11writeOutputPVhhb>:
+  5e:	fc 01       	movw	r30, r24
+  60:	80 81       	ld	r24, Z
+  62:	21 e0       	ldi	r18, 0x01	; 1
+  64:	30 e0       	ldi	r19, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <_Z11writeOutputPVhhb+0xc>
+  68:	22 0f       	add	r18, r18
+  6a:	6a 95       	dec	r22
+  6c:	ea f7       	brpl	.-6      	; 0x68 <_Z11writeOutputPVhhb+0xa>
+  6e:	44 23       	and	r20, r20
+  70:	11 f0       	breq	.+4      	; 0x76 <_Z11writeOutputPVhhb+0x18>
+  72:	28 2b       	or	r18, r24
+  74:	02 c0       	rjmp	.+4      	; 0x7a <_Z11writeOutputPVhhb+0x1c>
+  76:	20 95       	com	r18
+  78:	28 23       	and	r18, r24
+  7a:	20 83       	st	Z, r18
+  7c:	08 95       	ret
+
+0000007e <_Z11doPhaseLoopv>:
+  7e:	cf 93       	push	r28
+  80:	df 93       	push	r29
+  82:	c4 e1       	ldi	r28, 0x14	; 20
+  84:	d0 e0       	ldi	r29, 0x00	; 0
+  86:	12 ba       	out	0x12, r1	; 18
+  88:	18 ba       	out	0x18, r1	; 24
+  8a:	88 e2       	ldi	r24, 0x28	; 40
+  8c:	8a 95       	dec	r24
+  8e:	f1 f7       	brne	.-4      	; 0x8c <_Z11doPhaseLoopv+0xe>
+  90:	41 e0       	ldi	r20, 0x01	; 1
+  92:	65 e0       	ldi	r22, 0x05	; 5
+  94:	82 e3       	ldi	r24, 0x32	; 50
+  96:	90 e0       	ldi	r25, 0x00	; 0
+  98:	e2 df       	rcall	.-60     	; 0x5e <_Z11writeOutputPVhhb>
+  9a:	41 e0       	ldi	r20, 0x01	; 1
+  9c:	61 e0       	ldi	r22, 0x01	; 1
+  9e:	88 e3       	ldi	r24, 0x38	; 56
+  a0:	90 e0       	ldi	r25, 0x00	; 0
+  a2:	dd df       	rcall	.-70     	; 0x5e <_Z11writeOutputPVhhb>
+  a4:	80 e5       	ldi	r24, 0x50	; 80
+  a6:	8a 95       	dec	r24
+  a8:	f1 f7       	brne	.-4      	; 0xa6 <_Z11doPhaseLoopv+0x28>
+  aa:	21 97       	sbiw	r28, 0x01	; 1
+  ac:	61 f7       	brne	.-40     	; 0x86 <_Z11doPhaseLoopv+0x8>
+  ae:	c4 e1       	ldi	r28, 0x14	; 20
+  b0:	d0 e0       	ldi	r29, 0x00	; 0
+  b2:	12 ba       	out	0x12, r1	; 18
+  b4:	18 ba       	out	0x18, r1	; 24
+  b6:	88 e2       	ldi	r24, 0x28	; 40
+  b8:	8a 95       	dec	r24
+  ba:	f1 f7       	brne	.-4      	; 0xb8 <_Z11doPhaseLoopv+0x3a>
+  bc:	41 e0       	ldi	r20, 0x01	; 1
+  be:	63 e0       	ldi	r22, 0x03	; 3
+  c0:	82 e3       	ldi	r24, 0x32	; 50
+  c2:	90 e0       	ldi	r25, 0x00	; 0
+  c4:	cc df       	rcall	.-104    	; 0x5e <_Z11writeOutputPVhhb>
+  c6:	41 e0       	ldi	r20, 0x01	; 1
+  c8:	61 e0       	ldi	r22, 0x01	; 1
+  ca:	88 e3       	ldi	r24, 0x38	; 56
+  cc:	90 e0       	ldi	r25, 0x00	; 0
+  ce:	c7 df       	rcall	.-114    	; 0x5e <_Z11writeOutputPVhhb>
+  d0:	80 e5       	ldi	r24, 0x50	; 80
+  d2:	8a 95       	dec	r24
+  d4:	f1 f7       	brne	.-4      	; 0xd2 <_Z11doPhaseLoopv+0x54>
+  d6:	21 97       	sbiw	r28, 0x01	; 1
+  d8:	61 f7       	brne	.-40     	; 0xb2 <_Z11doPhaseLoopv+0x34>
+  da:	c4 e1       	ldi	r28, 0x14	; 20
+  dc:	d0 e0       	ldi	r29, 0x00	; 0
+  de:	12 ba       	out	0x12, r1	; 18
+  e0:	18 ba       	out	0x18, r1	; 24
+  e2:	88 e2       	ldi	r24, 0x28	; 40
+  e4:	8a 95       	dec	r24
+  e6:	f1 f7       	brne	.-4      	; 0xe4 <_Z11doPhaseLoopv+0x66>
   e8:	41 e0       	ldi	r20, 0x01	; 1
-  ea:	62 e0       	ldi	r22, 0x02	; 2
-  ec:	88 e3       	ldi	r24, 0x38	; 56
+  ea:	63 e0       	ldi	r22, 0x03	; 3
+  ec:	82 e3       	ldi	r24, 0x32	; 50
   ee:	90 e0       	ldi	r25, 0x00	; 0
-  f0:	a3 df       	rcall	.-186    	; 0x38 <_Z11writeOutputPVhhb>
-  f2:	85 e3       	ldi	r24, 0x35	; 53
-  f4:	8a 95       	dec	r24
-  f6:	f1 f7       	brne	.-4      	; 0xf4 <main+0x9c>
-  f8:	00 00       	nop
-  fa:	21 97       	sbiw	r28, 0x01	; 1
-  fc:	51 f7       	brne	.-44     	; 0xd2 <main+0x7a>
-  fe:	c4 e1       	ldi	r28, 0x14	; 20
- 100:	d0 e0       	ldi	r29, 0x00	; 0
- 102:	12 ba       	out	0x12, r1	; 18
- 104:	18 ba       	out	0x18, r1	; 24
- 106:	8a e1       	ldi	r24, 0x1A	; 26
- 108:	8a 95       	dec	r24
- 10a:	f1 f7       	brne	.-4      	; 0x108 <main+0xb0>
- 10c:	00 c0       	rjmp	.+0      	; 0x10e <main+0xb6>
- 10e:	41 e0       	ldi	r20, 0x01	; 1
- 110:	64 e0       	ldi	r22, 0x04	; 4
- 112:	82 e3       	ldi	r24, 0x32	; 50
- 114:	90 e0       	ldi	r25, 0x00	; 0
- 116:	90 df       	rcall	.-224    	; 0x38 <_Z11writeOutputPVhhb>
- 118:	41 e0       	ldi	r20, 0x01	; 1
- 11a:	62 e0       	ldi	r22, 0x02	; 2
- 11c:	88 e3       	ldi	r24, 0x38	; 56
- 11e:	90 e0       	ldi	r25, 0x00	; 0
- 120:	8b df       	rcall	.-234    	; 0x38 <_Z11writeOutputPVhhb>
- 122:	85 e3       	ldi	r24, 0x35	; 53
- 124:	8a 95       	dec	r24
- 126:	f1 f7       	brne	.-4      	; 0x124 <main+0xcc>
- 128:	00 00       	nop
- 12a:	21 97       	sbiw	r28, 0x01	; 1
- 12c:	51 f7       	brne	.-44     	; 0x102 <main+0xaa>
- 12e:	c4 e1       	ldi	r28, 0x14	; 20
- 130:	d0 e0       	ldi	r29, 0x00	; 0
- 132:	12 ba       	out	0x12, r1	; 18
- 134:	18 ba       	out	0x18, r1	; 24
- 136:	8a e1       	ldi	r24, 0x1A	; 26
- 138:	8a 95       	dec	r24
- 13a:	f1 f7       	brne	.-4      	; 0x138 <main+0xe0>
- 13c:	00 c0       	rjmp	.+0      	; 0x13e <main+0xe6>
- 13e:	41 e0       	ldi	r20, 0x01	; 1
- 140:	64 e0       	ldi	r22, 0x04	; 4
- 142:	82 e3       	ldi	r24, 0x32	; 50
- 144:	90 e0       	ldi	r25, 0x00	; 0
- 146:	78 df       	rcall	.-272    	; 0x38 <_Z11writeOutputPVhhb>
- 148:	41 e0       	ldi	r20, 0x01	; 1
- 14a:	60 e0       	ldi	r22, 0x00	; 0
- 14c:	88 e3       	ldi	r24, 0x38	; 56
- 14e:	90 e0       	ldi	r25, 0x00	; 0
- 150:	73 df       	rcall	.-282    	; 0x38 <_Z11writeOutputPVhhb>
- 152:	85 e3       	ldi	r24, 0x35	; 53
- 154:	8a 95       	dec	r24
- 156:	f1 f7       	brne	.-4      	; 0x154 <main+0xfc>
- 158:	00 00       	nop
+  f0:	b6 df       	rcall	.-148    	; 0x5e <_Z11writeOutputPVhhb>
+  f2:	41 e0       	ldi	r20, 0x01	; 1
+  f4:	62 e0       	ldi	r22, 0x02	; 2
+  f6:	88 e3       	ldi	r24, 0x38	; 56
+  f8:	90 e0       	ldi	r25, 0x00	; 0
+  fa:	b1 df       	rcall	.-158    	; 0x5e <_Z11writeOutputPVhhb>
+  fc:	80 e5       	ldi	r24, 0x50	; 80
+  fe:	8a 95       	dec	r24
+ 100:	f1 f7       	brne	.-4      	; 0xfe <_Z11doPhaseLoopv+0x80>
+ 102:	21 97       	sbiw	r28, 0x01	; 1
+ 104:	61 f7       	brne	.-40     	; 0xde <_Z11doPhaseLoopv+0x60>
+ 106:	c4 e1       	ldi	r28, 0x14	; 20
+ 108:	d0 e0       	ldi	r29, 0x00	; 0
+ 10a:	12 ba       	out	0x12, r1	; 18
+ 10c:	18 ba       	out	0x18, r1	; 24
+ 10e:	88 e2       	ldi	r24, 0x28	; 40
+ 110:	8a 95       	dec	r24
+ 112:	f1 f7       	brne	.-4      	; 0x110 <_Z11doPhaseLoopv+0x92>
+ 114:	41 e0       	ldi	r20, 0x01	; 1
+ 116:	64 e0       	ldi	r22, 0x04	; 4
+ 118:	82 e3       	ldi	r24, 0x32	; 50
+ 11a:	90 e0       	ldi	r25, 0x00	; 0
+ 11c:	a0 df       	rcall	.-192    	; 0x5e <_Z11writeOutputPVhhb>
+ 11e:	41 e0       	ldi	r20, 0x01	; 1
+ 120:	62 e0       	ldi	r22, 0x02	; 2
+ 122:	88 e3       	ldi	r24, 0x38	; 56
+ 124:	90 e0       	ldi	r25, 0x00	; 0
+ 126:	9b df       	rcall	.-202    	; 0x5e <_Z11writeOutputPVhhb>
+ 128:	80 e5       	ldi	r24, 0x50	; 80
+ 12a:	8a 95       	dec	r24
+ 12c:	f1 f7       	brne	.-4      	; 0x12a <_Z11doPhaseLoopv+0xac>
+ 12e:	21 97       	sbiw	r28, 0x01	; 1
+ 130:	61 f7       	brne	.-40     	; 0x10a <_Z11doPhaseLoopv+0x8c>
+ 132:	c4 e1       	ldi	r28, 0x14	; 20
+ 134:	d0 e0       	ldi	r29, 0x00	; 0
+ 136:	12 ba       	out	0x12, r1	; 18
+ 138:	18 ba       	out	0x18, r1	; 24
+ 13a:	88 e2       	ldi	r24, 0x28	; 40
+ 13c:	8a 95       	dec	r24
+ 13e:	f1 f7       	brne	.-4      	; 0x13c <_Z11doPhaseLoopv+0xbe>
+ 140:	41 e0       	ldi	r20, 0x01	; 1
+ 142:	64 e0       	ldi	r22, 0x04	; 4
+ 144:	82 e3       	ldi	r24, 0x32	; 50
+ 146:	90 e0       	ldi	r25, 0x00	; 0
+ 148:	8a df       	rcall	.-236    	; 0x5e <_Z11writeOutputPVhhb>
+ 14a:	41 e0       	ldi	r20, 0x01	; 1
+ 14c:	60 e0       	ldi	r22, 0x00	; 0
+ 14e:	88 e3       	ldi	r24, 0x38	; 56
+ 150:	90 e0       	ldi	r25, 0x00	; 0
+ 152:	85 df       	rcall	.-246    	; 0x5e <_Z11writeOutputPVhhb>
+ 154:	80 e5       	ldi	r24, 0x50	; 80
+ 156:	8a 95       	dec	r24
+ 158:	f1 f7       	brne	.-4      	; 0x156 <_Z11doPhaseLoopv+0xd8>
  15a:	21 97       	sbiw	r28, 0x01	; 1
- 15c:	51 f7       	brne	.-44     	; 0x132 <main+0xda>
+ 15c:	61 f7       	brne	.-40     	; 0x136 <_Z11doPhaseLoopv+0xb8>
  15e:	c4 e1       	ldi	r28, 0x14	; 20
  160:	d0 e0       	ldi	r29, 0x00	; 0
  162:	12 ba       	out	0x12, r1	; 18
  164:	18 ba       	out	0x18, r1	; 24
- 166:	8a e1       	ldi	r24, 0x1A	; 26
+ 166:	88 e2       	ldi	r24, 0x28	; 40
  168:	8a 95       	dec	r24
- 16a:	f1 f7       	brne	.-4      	; 0x168 <main+0x110>
- 16c:	00 c0       	rjmp	.+0      	; 0x16e <main+0x116>
- 16e:	41 e0       	ldi	r20, 0x01	; 1
- 170:	65 e0       	ldi	r22, 0x05	; 5
- 172:	82 e3       	ldi	r24, 0x32	; 50
- 174:	90 e0       	ldi	r25, 0x00	; 0
- 176:	60 df       	rcall	.-320    	; 0x38 <_Z11writeOutputPVhhb>
- 178:	41 e0       	ldi	r20, 0x01	; 1
- 17a:	60 e0       	ldi	r22, 0x00	; 0
- 17c:	88 e3       	ldi	r24, 0x38	; 56
- 17e:	90 e0       	ldi	r25, 0x00	; 0
- 180:	5b df       	rcall	.-330    	; 0x38 <_Z11writeOutputPVhhb>
- 182:	85 e3       	ldi	r24, 0x35	; 53
- 184:	8a 95       	dec	r24
- 186:	f1 f7       	brne	.-4      	; 0x184 <main+0x12c>
- 188:	00 00       	nop
- 18a:	21 97       	sbiw	r28, 0x01	; 1
- 18c:	51 f7       	brne	.-44     	; 0x162 <main+0x10a>
- 18e:	6f cf       	rjmp	.-290    	; 0x6e <main+0x16>
+ 16a:	f1 f7       	brne	.-4      	; 0x168 <_Z11doPhaseLoopv+0xea>
+ 16c:	41 e0       	ldi	r20, 0x01	; 1
+ 16e:	65 e0       	ldi	r22, 0x05	; 5
+ 170:	82 e3       	ldi	r24, 0x32	; 50
+ 172:	90 e0       	ldi	r25, 0x00	; 0
+ 174:	74 df       	rcall	.-280    	; 0x5e <_Z11writeOutputPVhhb>
+ 176:	41 e0       	ldi	r20, 0x01	; 1
+ 178:	60 e0       	ldi	r22, 0x00	; 0
+ 17a:	88 e3       	ldi	r24, 0x38	; 56
+ 17c:	90 e0       	ldi	r25, 0x00	; 0
+ 17e:	6f df       	rcall	.-290    	; 0x5e <_Z11writeOutputPVhhb>
+ 180:	80 e5       	ldi	r24, 0x50	; 80
+ 182:	8a 95       	dec	r24
+ 184:	f1 f7       	brne	.-4      	; 0x182 <_Z11doPhaseLoopv+0x104>
+ 186:	21 97       	sbiw	r28, 0x01	; 1
+ 188:	61 f7       	brne	.-40     	; 0x162 <_Z11doPhaseLoopv+0xe4>
+ 18a:	df 91       	pop	r29
+ 18c:	cf 91       	pop	r28
+ 18e:	08 95       	ret
 
-00000190 <_exit>:
- 190:	f8 94       	cli
+00000190 <main>:
+ 190:	21 e0       	ldi	r18, 0x01	; 1
+ 192:	40 e0       	ldi	r20, 0x00	; 0
+ 194:	61 e0       	ldi	r22, 0x01	; 1
+ 196:	88 e0       	ldi	r24, 0x08	; 8
+ 198:	90 e0       	ldi	r25, 0x00	; 0
+ 19a:	5f d0       	rcall	.+190    	; 0x25a <_Z10USART_initjbbb>
+ 19c:	88 e3       	ldi	r24, 0x38	; 56
+ 19e:	81 bb       	out	0x11, r24	; 17
+ 1a0:	87 e0       	ldi	r24, 0x07	; 7
+ 1a2:	87 bb       	out	0x17, r24	; 23
+ 1a4:	12 ba       	out	0x12, r1	; 18
+ 1a6:	18 ba       	out	0x18, r1	; 24
+ 1a8:	89 b7       	in	r24, 0x39	; 57
+ 1aa:	84 60       	ori	r24, 0x04	; 4
+ 1ac:	89 bf       	out	0x39, r24	; 57
+ 1ae:	67 df       	rcall	.-306    	; 0x7e <_Z11doPhaseLoopv>
+ 1b0:	fe cf       	rjmp	.-4      	; 0x1ae <main+0x1e>
 
-00000192 <__stop_program>:
- 192:	ff cf       	rjmp	.-2      	; 0x192 <__stop_program>
+000001b2 <__vector_1>:
+ 1b2:	1f 92       	push	r1
+ 1b4:	0f 92       	push	r0
+ 1b6:	0f b6       	in	r0, 0x3f	; 63
+ 1b8:	0f 92       	push	r0
+ 1ba:	11 24       	eor	r1, r1
+ 1bc:	8f 93       	push	r24
+ 1be:	9f 93       	push	r25
+ 1c0:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <isInputOn>
+ 1c4:	88 23       	and	r24, r24
+ 1c6:	91 f0       	breq	.+36     	; 0x1ec <__vector_1+0x3a>
+ 1c8:	8c b5       	in	r24, 0x2c	; 44
+ 1ca:	9d b5       	in	r25, 0x2d	; 45
+ 1cc:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <timer_value+0x1>
+ 1d0:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <timer_value>
+ 1d4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <__data_end>
+ 1d8:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <__data_end+0x1>
+ 1dc:	01 96       	adiw	r24, 0x01	; 1
+ 1de:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <__data_end+0x1>
+ 1e2:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__data_end>
+ 1e6:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <isInputOn>
+ 1ea:	09 c0       	rjmp	.+18     	; 0x1fe <__vector_1+0x4c>
+ 1ec:	1f bc       	out	0x2f, r1	; 47
+ 1ee:	1e bc       	out	0x2e, r1	; 46
+ 1f0:	1d bc       	out	0x2d, r1	; 45
+ 1f2:	1c bc       	out	0x2c, r1	; 44
+ 1f4:	82 e0       	ldi	r24, 0x02	; 2
+ 1f6:	8e bd       	out	0x2e, r24	; 46
+ 1f8:	81 e0       	ldi	r24, 0x01	; 1
+ 1fa:	80 93 66 00 	sts	0x0066, r24	; 0x800066 <isInputOn>
+ 1fe:	9f 91       	pop	r25
+ 200:	8f 91       	pop	r24
+ 202:	0f 90       	pop	r0
+ 204:	0f be       	out	0x3f, r0	; 63
+ 206:	0f 90       	pop	r0
+ 208:	1f 90       	pop	r1
+ 20a:	18 95       	reti
+
+0000020c <__vector_9>:
+ 20c:	1f 92       	push	r1
+ 20e:	0f 92       	push	r0
+ 210:	0f b6       	in	r0, 0x3f	; 63
+ 212:	0f 92       	push	r0
+ 214:	11 24       	eor	r1, r1
+ 216:	2f 93       	push	r18
+ 218:	3f 93       	push	r19
+ 21a:	4f 93       	push	r20
+ 21c:	5f 93       	push	r21
+ 21e:	6f 93       	push	r22
+ 220:	7f 93       	push	r23
+ 222:	8f 93       	push	r24
+ 224:	9f 93       	push	r25
+ 226:	af 93       	push	r26
+ 228:	bf 93       	push	r27
+ 22a:	ef 93       	push	r30
+ 22c:	ff 93       	push	r31
+ 22e:	8f e4       	ldi	r24, 0x4F	; 79
+ 230:	21 d0       	rcall	.+66     	; 0x274 <_Z14USART_transmith>
+ 232:	81 e0       	ldi	r24, 0x01	; 1
+ 234:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+ 238:	ff 91       	pop	r31
+ 23a:	ef 91       	pop	r30
+ 23c:	bf 91       	pop	r27
+ 23e:	af 91       	pop	r26
+ 240:	9f 91       	pop	r25
+ 242:	8f 91       	pop	r24
+ 244:	7f 91       	pop	r23
+ 246:	6f 91       	pop	r22
+ 248:	5f 91       	pop	r21
+ 24a:	4f 91       	pop	r20
+ 24c:	3f 91       	pop	r19
+ 24e:	2f 91       	pop	r18
+ 250:	0f 90       	pop	r0
+ 252:	0f be       	out	0x3f, r0	; 63
+ 254:	0f 90       	pop	r0
+ 256:	1f 90       	pop	r1
+ 258:	18 95       	reti
+
+0000025a <_Z10USART_initjbbb>:
+ 25a:	90 bd       	out	0x20, r25	; 32
+ 25c:	89 b9       	out	0x09, r24	; 9
+ 25e:	61 11       	cpse	r22, r1
+ 260:	57 9a       	sbi	0x0a, 7	; 10
+ 262:	41 11       	cpse	r20, r1
+ 264:	56 9a       	sbi	0x0a, 6	; 10
+ 266:	21 11       	cpse	r18, r1
+ 268:	59 9a       	sbi	0x0b, 1	; 11
+ 26a:	8e e8       	ldi	r24, 0x8E	; 142
+ 26c:	80 bd       	out	0x20, r24	; 32
+ 26e:	88 e1       	ldi	r24, 0x18	; 24
+ 270:	8a b9       	out	0x0a, r24	; 10
+ 272:	08 95       	ret
+
+00000274 <_Z14USART_transmith>:
+ 274:	5d 9b       	sbis	0x0b, 5	; 11
+ 276:	fe cf       	rjmp	.-4      	; 0x274 <_Z14USART_transmith>
+ 278:	8c b9       	out	0x0c, r24	; 12
+ 27a:	08 95       	ret
+
+0000027c <_exit>:
+ 27c:	f8 94       	cli
+
+0000027e <__stop_program>:
+ 27e:	ff cf       	rjmp	.-2      	; 0x27e <__stop_program>

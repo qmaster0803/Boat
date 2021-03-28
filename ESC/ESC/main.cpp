@@ -1,28 +1,20 @@
-#define F_CPU 8000000
+#include "global_definitions.h"
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdlib.h>
 #include "io_helper.h"
+#include "usart.h"
 
-#define ApFET  5
-#define AnFET  2
-#define BpFET  4
-#define BnFET  1
-#define CpFET  3
-#define CnFET  0
-#define pwm_in 2
-
-#define ApFET_port  PORTD
-#define AnFET_port  PORTB
-#define BpFET_port  PORTD
-#define BnFET_port  PORTB
-#define CpFET_port  PORTD
-#define CnFET_port  PORTB
-#define pwm_in_port PORTD
-
-#define phase_time    20
-#define pwm_off_time  10
+#define phase_time    30
+#define pwm_off_time  15
 #define pwm_iteration 20
+
+bool stopped = true;
+bool isInputOn = false;
+uint16_t timer_value = 0;
+int doSend = 0;
 
 void doPhaseLoop()
 {
@@ -90,14 +82,59 @@ void doPhaseLoop()
 
 int main(void)
 {
-	DDRD = 0b00111100;
+	USART_init(8); //115200 baud
+
+	DDRD = 0b00111000;
 	DDRB = 0b00000111;
 	PORTD = 0b00000000;
 	PORTB = 0b00000000;
+	
+	//enabling INT0 interrupt (rising mode)
+	//MCUCR |= (1<<ISC00); 
+	//GICR |= (1<<INT0);
+	//enable Timer1 overflow interrupt (used to stop motor)
+	TIMSK |= (1<<TOIE1);
+	//sei();
+	
     while(true) 
     {
-		//doPhaseLoop();
-		readInput(&pwm_in_port, pwm_in);
+		doPhaseLoop();
+		//readInput(&pwm_in_port, pwm_in);
     }
 }
 
+ISR(INT0_vect)
+{
+	if(isInputOn) //back
+	{
+		timer_value = TCNT1;
+		doSend++;
+		if(false)
+		{
+			char buffer[8] = {0};
+			itoa(timer_value, buffer, 10);
+			USART_transmit_array(buffer, 8);
+			USART_transmit(0x0d);
+			USART_transmit(0x0a);
+			doSend = 0;
+		}
+		isInputOn = false;
+	}
+	else //front
+	{
+		//reset Timer0
+		TCCR1A = 0b00000000;
+		TCCR1B = 0b00000000;
+		TCNT1H = 0x00;
+		TCNT1L = 0x00;
+		//start timer0
+		TCCR1B = 0b00000010;
+		isInputOn = true;
+	}
+}
+
+ISR(TIMER0_OVF_vect) //debug
+{
+	USART_transmit('O');
+	stopped = true;
+}
